@@ -26,34 +26,70 @@ class CartPage extends StatelessWidget {
             );
           }
           return ListView.builder(
-            padding: const EdgeInsets.only(bottom: 80),
+            padding: const EdgeInsets.only(bottom: 80, left: 12, right: 12, top: 8),
             itemCount: cartItems.length,
             itemBuilder: (context, index) {
               final product = cartItems[index];
-              return ListTile(
-                leading: Image.network(
-                  product["thumbnail"],
-                  width: 50,
-                  height: 50,
-                  fit: BoxFit.cover,
+              return Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                title: Text(product["title"]),
-                subtitle: Text("\$${product["price"]}"),
-                trailing: IconButton(
-                  icon: const Icon(Icons.remove_circle, color: Colors.red),
-                  onPressed: () {
-                    context.read<CartCubit>().removeFromCart(product);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: Colors.red,
-                        content: Text(
-                          "Product removed from cart",
-                          style: const TextStyle(color: Colors.white),
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                elevation: 3,
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Row(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(
+                          product["thumbnail"],
+                          width: 70,
+                          height: 70,
+                          fit: BoxFit.cover,
                         ),
-                        duration: const Duration(seconds: 1),
                       ),
-                    );
-                  },
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              product["title"],
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              "\$${product["price"]}",
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.remove_circle, color: Colors.red),
+                        onPressed: () {
+                          context.read<CartCubit>().removeFromCart(product);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: Colors.red,
+                              content: const Text(
+                                "Product removed from cart",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              duration: Duration(seconds: 1),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
